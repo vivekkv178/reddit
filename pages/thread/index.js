@@ -1,5 +1,5 @@
 /**
- * If user tries to access thread route without threaId then the user is redireted to home page
+ * If user tries to access thread route without threaId then the user is redirected to home page
  */
 export default function Thread() {
   return <></>;

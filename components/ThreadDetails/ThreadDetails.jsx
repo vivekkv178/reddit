@@ -1,8 +1,8 @@
 import React from "react";
 import Thread from "../UI/Thread.jsx";
-import axios from "axios";
 import * as constants from "../../constants";
 import Snackbar from "@mui/material/Snackbar";
+import { getThreadData } from "./sideEffects";
 
 class ThreadDetails extends React.Component {
   constructor(props) {
@@ -20,19 +20,13 @@ class ThreadDetails extends React.Component {
 
   callAPI = () => {
     this.setState({ loading: true });
-    axios
-      .get(`https://www.reddit.com/${this.props.threadLink}.json`)
-      .then((res) => {
-        this.setState({
-          data: res.data[0].data.children[0].data,
-          loading: false,
-        });
+
+    getThreadData(this.props, this.state)
+      .then((successState) => {
+        this.setState(successState);
       })
-      .catch((e) => {
-        this.setState({
-          error: true,
-          loading: false,
-        });
+      .catch((errorState) => {
+        this.setState(errorState);
       });
   };
 
@@ -56,15 +50,17 @@ class ThreadDetails extends React.Component {
             loading={this.state.loading}
           />
         )}
-        <Snackbar
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          open={this.state.error}
-          onClose={this.closeSnackbar}
-          message={constants.ERROR_MESSAGE}
-        />
+        {this.state.error && (
+          <Snackbar
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={this.state.error}
+            onClose={this.closeSnackbar}
+            message={constants.ERROR_MESSAGE}
+          />
+        )}
       </>
     );
   }

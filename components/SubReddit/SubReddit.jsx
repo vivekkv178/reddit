@@ -1,9 +1,11 @@
 import React from "react";
 import Thread from "../UI/Thread.jsx";
-import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import { connect } from "react-redux";
+import { getSubRedditData } from "./sideEffects";
+import Snackbar from "@mui/material/Snackbar";
+import * as constants from "../../constants";
 
 class SubReddit extends React.Component {
   constructor(props) {
@@ -12,6 +14,7 @@ class SubReddit extends React.Component {
       data: [],
       loading: false,
       after: null,
+      error: false,
     };
   }
 
@@ -38,18 +41,12 @@ class SubReddit extends React.Component {
   callAPI = () => {
     this.setState({ loading: true });
 
-    axios
-      .get(
-        `https://www.reddit.com/r/dota2/${this.props.sort}/.json?after=${this.state.after}&raw_json=1&limit=10`
-      )
-      .then((res) => {
-        let newData = [...this.state.data];
-        newData = newData.concat(res.data.data.children);
-        this.setState({
-          data: newData,
-          after: `t3_${newData[newData.length - 1].data.id}`,
-          loading: false,
-        });
+    getSubRedditData(this.props, this.state)
+      .then((successState) => {
+        this.setState(successState);
+      })
+      .catch((errorState) => {
+        this.setState(errorState);
       });
   };
 
@@ -60,17 +57,33 @@ class SubReddit extends React.Component {
       });
   }
 
+  closeSnackbar = () => {
+    this.setState({
+      error: false,
+    });
+  };
+
   render() {
     return (
       <Container maxWidth="sm">
-        <br />
-        {this.state.data.map((thread,index) => (
+        {this.state.data.map((thread, index) => (
           <Thread key={index} thread={thread} />
         ))}
         {this.state.loading && (
           <div style={{ display: "flex", justifyContent: "center" }}>
             <CircularProgress />
           </div>
+        )}
+        {this.state.error && (
+          <Snackbar
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={this.state.error}
+            onClose={this.closeSnackbar}
+            message={constants.ERROR_MESSAGE}
+          />
         )}
       </Container>
     );

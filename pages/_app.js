@@ -1,9 +1,8 @@
 import "../styles/globals.css";
 import React from "react";
 import { Provider } from "react-redux";
-import { createStore, compose } from "redux";
+import { createStore } from "redux";
 import rootReducer from "../store/reducers/index";
-
 
 const store = createStore(rootReducer);
 
