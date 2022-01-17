@@ -39,7 +39,13 @@ export default function Thread(props) {
           </div>
         ) : (
           <Card sx={{ display: "flex", margin: "10px", cursor: "pointer" }}>
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                p: 2,
+              }}
+            >
               <CardContent sx={{ flex: "1 0 auto" }}>
                 <Typography component="div" variant="h5">
                   {props.thread.data.title}
