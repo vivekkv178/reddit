@@ -10,12 +10,16 @@ https://reddit-vivekkv178.vercel.app/
 First, run the development server:
 
 ```bash
+npm i
 npm run dev
 ```
 
 ## Run the Production Server by building the code
 
+To build and access the built version:
+
 ```bash
+npm i
 npm run build
 npm run start
 ```
