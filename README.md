@@ -15,8 +15,6 @@ npm run dev
 
 ## Run the Production Server by building the code
 
-First, run the development server:
-
 ```bash
 npm run build
 npm run start
